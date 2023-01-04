@@ -1,37 +1,27 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestPlatform.Common.ExtensionFramework;
+using NUnit.Framework;
 
 namespace LogAn.UnitTests
 {
     [TestFixture]
     public class LogAnalyzerTests
     {
-        [TestCase("badfile.foo", false)]
-        [TestCase("goodfile.slf", true)]
-        public void IsValidFileName_WhenCalled_ChangesWasLastFileNameValid(string file, bool expected)
-        {
-            LogAnalyzer la = MakeAnalyzer();
-            la.IsValidLogFileName(file);
-            Assert.AreEqual(expected, la.WasLastFileNameValid);
-        }
         [Test]
-        public void IsValidFileName_EmptyFileName_ThrowsException()
+        public void IsValidFileName_NameSupportedExtension_ReturnsTrue()
         {
-            LogAnalyzer la = MakeAnalyzer();
-            Exception? ex = Assert.Catch<Exception>(() => la.IsValidLogFileName(""));
-            StringAssert.Contains("filename has to be provided", ex.Message);
+            FakeExtensionManager myFakeManager = new FakeExtensionManager();
+            myFakeManager.WillBeValid = true;
+            LogAnalyzer log = new LogAnalyzer(myFakeManager);
+            bool result = log.IsValidLogFileName("short.ext");
+            Assert.IsTrue(result);
         }
-        [TestCase("filewithgoodextenstion.slf", true)]
-        [TestCase("filewithgoodextenstion.SLF", true)]
-        [TestCase("filewithbadextenstion.foo", false)]
-        public void IsValidLogFileName_VariousExtenstions_ChecksThem(string file, bool expected)
+    }
+    internal class FakeExtensionManager : IExtensionManager
+    {
+        public bool WillBeValid = false;
+        public bool IsValid(string filename)
         {
-            LogAnalyzer la = MakeAnalyzer();
-            bool result = la.IsValidLogFileName(file);
-            Assert.AreEqual(expected, result);
-        }
-        private LogAnalyzer MakeAnalyzer()
-        {
-            return new LogAnalyzer();
+            return WillBeValid;
         }
     }
 }
