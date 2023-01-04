@@ -5,6 +5,14 @@ namespace LogAn.UnitTests
     [TestFixture]
     public class LogAnalyzerTests
     {
+        [TestCase("badfile.foo", false)]
+        [TestCase("goodfile.slf", true)]
+        public void IsValidFileName_WhenCalled_ChangesWasLastFileNameValid(string file, bool expected)
+        {
+            LogAnalyzer la = MakeAnalyzer();
+            la.IsValidLogFileName(file);
+            Assert.AreEqual(expected, la.WasLastFileNameValid);
+        }
         [Test]
         public void IsValidFileName_EmptyFileName_ThrowsException()
         {
