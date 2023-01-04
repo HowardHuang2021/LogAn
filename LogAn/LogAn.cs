@@ -11,7 +11,14 @@ namespace LogAn
         }
         public bool IsValidLogFileName(string filename)
         {
-            return manager.IsValid(filename);
+            try
+            {
+                return manager.IsValid(filename);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
     public class FileExtensionManager : IExtensionManager
