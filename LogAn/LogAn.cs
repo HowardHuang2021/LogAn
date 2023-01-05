@@ -5,18 +5,9 @@ namespace LogAn
     public class LogAnalyzer
     {
         private IExtensionManager manager;
-        //public LogAnalyzer(IExtensionManager mgr)
-        //{
-        //    manager = mgr;
-        //}
-        public LogAnalyzer()
+        public LogAnalyzer(ExtensionManagerFactory extensionManagerFactory)
         {
-            manager = new FileExtensionManager();
-        }
-        public IExtensionManager ExtensionManager
-        {
-            get { return manager; }
-            set { manager = value; }
+            manager = extensionManagerFactory.Create();
         }
         public bool IsValidLogFileName(string filename)
         {
@@ -28,6 +19,20 @@ namespace LogAn
             {
                 return false;
             }
+        }
+    }
+    public class ExtensionManagerFactory
+    {
+        private IExtensionManager? customManager = null;
+        public IExtensionManager Create()
+        {
+            if (customManager != null)
+                return customManager;
+            return new FileExtensionManager();
+        }
+        public void SetManager(IExtensionManager mgr)
+        {
+            customManager = mgr;
         }
     }
     public class FileExtensionManager : IExtensionManager

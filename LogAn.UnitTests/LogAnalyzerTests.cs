@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestPlatform.Common.ExtensionFramework;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace LogAn.UnitTests
 {
@@ -11,9 +10,11 @@ namespace LogAn.UnitTests
         {
             FakeExtensionManager myFakeManager = new FakeExtensionManager();
             myFakeManager.WillBeValid = true;
-            //LogAnalyzer log = new LogAnalyzer(myFakeManager);
-            LogAnalyzer log = new LogAnalyzer();
-            log.ExtensionManager = myFakeManager;
+
+            ExtensionManagerFactory extensionManagerFactory = new ExtensionManagerFactory();
+            extensionManagerFactory.SetManager(myFakeManager);
+
+            LogAnalyzer log = new LogAnalyzer(extensionManagerFactory);
             bool result = log.IsValidLogFileName("short.ext");
             Assert.IsTrue(result);
         }
@@ -22,9 +23,11 @@ namespace LogAn.UnitTests
         {
             FakeExtensionManager myFakeManager = new FakeExtensionManager();
             myFakeManager.WillThrow = new Exception("this if fake");
-            //LogAnalyzer log = new LogAnalyzer(myFakeManager);
-            LogAnalyzer log = new LogAnalyzer();
-            log.ExtensionManager = myFakeManager;
+
+            ExtensionManagerFactory extensionManagerFactory = new ExtensionManagerFactory();
+            extensionManagerFactory.SetManager(myFakeManager);
+
+            LogAnalyzer log = new LogAnalyzer(extensionManagerFactory);
             bool result = log.IsValidLogFileName("anything.anyextension");
             Assert.IsFalse(result);
         }
