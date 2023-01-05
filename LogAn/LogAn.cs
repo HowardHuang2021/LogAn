@@ -35,6 +35,24 @@ namespace LogAn
             customManager = mgr;
         }
     }
+    public class LogAnalyzerUsingFactoryMethod
+    {
+        public bool IsValidLogFileName(string filename)
+        {
+            try
+            {
+                return GetManager().IsValid(filename);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        protected virtual IExtensionManager GetManager()
+        {
+            return new FileExtensionManager();
+        }
+    }
     public class FileExtensionManager : IExtensionManager
     {
         public bool WasLastFileNameValid { get; set; }
