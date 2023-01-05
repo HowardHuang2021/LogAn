@@ -5,9 +5,18 @@ namespace LogAn
     public class LogAnalyzer
     {
         private IExtensionManager manager;
-        public LogAnalyzer(IExtensionManager mgr)
+        //public LogAnalyzer(IExtensionManager mgr)
+        //{
+        //    manager = mgr;
+        //}
+        public LogAnalyzer()
         {
-            manager = mgr;
+            manager = new FileExtensionManager();
+        }
+        public IExtensionManager ExtensionManager
+        {
+            get { return manager; }
+            set { manager = value; }
         }
         public bool IsValidLogFileName(string filename)
         {

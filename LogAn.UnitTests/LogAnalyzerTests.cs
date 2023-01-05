@@ -11,7 +11,9 @@ namespace LogAn.UnitTests
         {
             FakeExtensionManager myFakeManager = new FakeExtensionManager();
             myFakeManager.WillBeValid = true;
-            LogAnalyzer log = new LogAnalyzer(myFakeManager);
+            //LogAnalyzer log = new LogAnalyzer(myFakeManager);
+            LogAnalyzer log = new LogAnalyzer();
+            log.ExtensionManager = myFakeManager;
             bool result = log.IsValidLogFileName("short.ext");
             Assert.IsTrue(result);
         }
@@ -20,7 +22,9 @@ namespace LogAn.UnitTests
         {
             FakeExtensionManager myFakeManager = new FakeExtensionManager();
             myFakeManager.WillThrow = new Exception("this if fake");
-            LogAnalyzer log = new LogAnalyzer(myFakeManager);
+            //LogAnalyzer log = new LogAnalyzer(myFakeManager);
+            LogAnalyzer log = new LogAnalyzer();
+            log.ExtensionManager = myFakeManager;
             bool result = log.IsValidLogFileName("anything.anyextension");
             Assert.IsFalse(result);
         }
