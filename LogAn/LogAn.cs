@@ -53,6 +53,25 @@ namespace LogAn
             return new FileExtensionManager();
         }
     }
+    public class LogAnalyzerUsingFactoryMethodWithoutInterface
+    {
+        public bool IsValidLogFileName(string filename)
+        {
+            try
+            {
+                return IsValid(filename);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        protected virtual bool IsValid(string filename)
+        {
+            FileExtensionManager mgr = new FileExtensionManager();
+            return mgr.IsValid(filename);
+        }
+    }
     public class FileExtensionManager : IExtensionManager
     {
         public bool WasLastFileNameValid { get; set; }

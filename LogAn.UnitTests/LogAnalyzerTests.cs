@@ -68,6 +68,39 @@ namespace LogAn.UnitTests
             return Manager;
         }
     }
+    [TestFixture]
+    public class LogAnalyzerUsingFactoryMethodWithoutInterfaceTests
+    {
+        [Test]
+        public void IsValidFileName_NameSupportedExtension_ReturnsTrue()
+        {
+            TestableLogAnalyzerWithoutInterface log = new TestableLogAnalyzerWithoutInterface();
+            log.WillBeValid = true;
+            bool result = log.IsValidLogFileName("short.ext");
+            Assert.IsTrue(result);
+        }
+        [Test]
+        public void isvalidfilename_extmanagerthrowsexception_returnsfalse()
+        {
+            TestableLogAnalyzerWithoutInterface log = new TestableLogAnalyzerWithoutInterface();
+            log.WillThrow = new Exception("this if fake");
+            bool result = log.IsValidLogFileName("anything.anyextension");
+            Assert.IsFalse(result);
+        }
+    }
+    class TestableLogAnalyzerWithoutInterface : LogAnalyzerUsingFactoryMethodWithoutInterface
+    {
+        public bool WillBeValid;
+        public Exception? WillThrow = null;
+        protected override bool IsValid(string filename)
+        {
+            if (WillThrow != null)
+            {
+                throw WillThrow;
+            }
+            return WillBeValid;
+        }
+    }
     internal class FakeExtensionManager : IExtensionManager
     {
         public bool WillBeValid = false;
